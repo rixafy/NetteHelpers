@@ -1,0 +1,19 @@
+<idea-plugin>
+    <id>org.nette.helpers</id>
+    <name>Nette Helpers</name>
+    <vendor>Nette Community</vendor>
+
+    <!-- http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges -->
+    <idea-version/>
+
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.jetbrains.php</depends>
+
+    <extensions defaultExtensionNs="com.jetbrains.php">
+        <typeProvider4 implementation="org.nette.helpers.typeProvider.ControlTypeProvider"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <completion.contributor language="PHP" implementationClass="org.nette.helpers.completion.ControlCompletionContributor"/>
+    </extensions>
+</idea-plugin>

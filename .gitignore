@@ -1,0 +1,10 @@
+.DS_Store
+*.iml
+local.properties
+/src/main/gen
+/.idea
+/.kotlin
+/.intellijPlatform
+/.gradle
+/build
+/out
