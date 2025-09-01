@@ -40,13 +40,8 @@ class ControlTypeProvider : PhpTypeProvider4 {
             componentName = first.contents
         }
 
-        val classes = candidate?.resolvePhpClasses()?.filter { it.isComponent() } ?: return null
-        for (phpClass in classes) {
-            val method = phpClass
-                .getControls()
-                .firstOrNull { it.asControlName() == componentName } ?: continue
-
-            return method.type
+        for (phpClass in candidate?.resolvePhpClasses()?.filter { it.isComponent() } ?: return null) {
+            return phpClass.getControls().firstOrNull { it.asControlName() == componentName }?.type ?: continue
         }
 
         return null
