@@ -27,12 +27,6 @@ class ControlCompletionContributor : CompletionContributor() {
             result: CompletionResultSet
         ) {
             val stringLiteral = parameters.originalPosition?.parent as? StringLiteralExpression ?: return
-            val prefix = if (result.prefixMatcher.prefix.contains("-")) {
-                result.prefixMatcher.prefix.take(result.prefixMatcher.prefix.lastIndexOf("-") + 1)
-            } else {
-                ""
-            }
-
             var target: PsiElement? = null
 
             // Case 1: $this['...'] array access
@@ -53,6 +47,10 @@ class ControlCompletionContributor : CompletionContributor() {
             val classes = target?.resolvePhpClasses()?.filter { it.isComponent() } ?: return
             if (classes.isEmpty()) return
 
+            val prefix = result.prefixMatcher.prefix.let { prefix ->
+                if (prefix.contains("-")) prefix.take(prefix.lastIndexOf("-") + 1) else ""
+            }
+            
             val seen = HashSet<String>()
             for (phpClass in target.resolvePhpClasses().filter { it.isComponent() } ) {
                 for (method in phpClass.getControls()) {
