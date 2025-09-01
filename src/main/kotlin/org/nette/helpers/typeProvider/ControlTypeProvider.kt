@@ -32,7 +32,6 @@ class ControlTypeProvider : PhpTypeProvider4 {
         if (element is MethodReference) {
             val name = element.name ?: return null
             if (name != "getComponent") return null
-
             val parameters = element.parameters
             if (parameters.isEmpty()) return null
             val first = parameters[0]
@@ -41,14 +40,13 @@ class ControlTypeProvider : PhpTypeProvider4 {
             componentName = first.contents
         }
 
-        for (phpClass in candidate?.resolvePhpClasses() ?: emptyList()) {
-            if (phpClass.isComponent()) {
-                val method = phpClass
-                    .getControls()
-                    .firstOrNull { it.asControlName() == componentName } ?: continue
+        val classes = candidate?.resolvePhpClasses()?.filter { it.isComponent() } ?: return null
+        for (phpClass in classes) {
+            val method = phpClass
+                .getControls()
+                .firstOrNull { it.asControlName() == componentName } ?: continue
 
-                return method.type
-            }
+            return method.type
         }
 
         return null

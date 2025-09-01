@@ -30,7 +30,7 @@ class ControlCompletionContributor : CompletionContributor() {
                 ""
             }
 
-            val classes = arrayAccess.value?.resolvePhpClasses() ?: return
+            val classes = arrayAccess.value?.resolvePhpClasses()?.filter { it.isComponent() } ?: return
             if (classes.isEmpty()) return
 
             // Avoid duplicate component names if multiple classes provide the same factory

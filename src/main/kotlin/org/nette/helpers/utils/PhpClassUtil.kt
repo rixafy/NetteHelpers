@@ -25,11 +25,7 @@ fun PhpClass.isInstanceOf(fqn: String): Boolean {
 }
 
 fun PhpClass.getControls(): List<Method> {
-    if (this.isComponent()) {
-        return this.methods.filter {
-            it.name.startsWith("createComponent") && it.name != "createComponent"
-        }
+    return this.methods.filter {
+        it.name.startsWith("createComponent") && it.name != "createComponent"
     }
-
-    return emptyList()
 }
