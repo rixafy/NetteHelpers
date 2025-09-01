@@ -46,7 +46,6 @@ intellijPlatform {
         version.set(properties("pluginVersion"))
         ideaVersion {
             sinceBuild.set(properties("pluginSinceBuild"))
-            untilBuild.set(properties("pluginUntilBuild"))
         }
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         description.set(providers.fileContents(layout.projectDirectory.file("README.md")).asText.map {
