@@ -4,7 +4,6 @@ import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
 import com.jetbrains.php.lang.psi.elements.ArrayAccessExpression
 import com.jetbrains.php.lang.psi.elements.MethodReference
@@ -35,7 +34,7 @@ class ControlCompletionContributor : CompletionContributor() {
                 target = arrayAccess.value
             } else {
                 // Case 2: $this->getComponent('...')->...
-                val methodRef = PsiTreeUtil.getParentOfType(stringLiteral, MethodReference::class.java)
+                val methodRef = stringLiteral.parent?.parent as? MethodReference
                 if (methodRef != null && methodRef.name == "getComponent") {
                     val parametersList = methodRef.parameters
                     if (parametersList.isNotEmpty() && parametersList[0] == stringLiteral) {
@@ -52,7 +51,7 @@ class ControlCompletionContributor : CompletionContributor() {
             }
             
             val seen = HashSet<String>()
-            for (phpClass in target.resolvePhpClasses().filter { it.isComponent() } ) {
+            for (phpClass in classes) {
                 for (method in phpClass.getControls()) {
                     val name = method.asControlName()
                     if (seen.add(name)) {
