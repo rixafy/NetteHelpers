@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1] - 2025-09-02
+
+### Added
+
+- String autocompletion to getComponent(...)
+- Presenter class and methods are marked as used
+
 ## [1.0.0] - 2025-09-01
 
 ### Added
