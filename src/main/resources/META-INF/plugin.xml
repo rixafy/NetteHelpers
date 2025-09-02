@@ -14,6 +14,7 @@
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
+        <implicitUsageProvider implementation="org.nette.helpers.usageProvider.PresenterImplicitUsageProvider"/>
         <completion.contributor language="PHP" implementationClass="org.nette.helpers.completion.ControlCompletionContributor"/>
     </extensions>
 </idea-plugin>
