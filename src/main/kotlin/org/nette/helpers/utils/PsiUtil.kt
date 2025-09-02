@@ -11,18 +11,18 @@ import com.jetbrains.php.lang.psi.elements.Variable
 
 fun PsiElement.resolvePhpClasses(): List<PhpClass> {
     // $this -> containing class
-    if (this is Variable && this.name == "this") {
+    if (this is Variable && name == "this") {
         PsiTreeUtil.getParentOfType(this, PhpClass::class.java)?.let { return listOf(it) }
     }
 
     // Direct resolves
     if (this is ClassReference) {
-        val resolved = this.resolve()
+        val resolved = resolve()
         if (resolved is PhpClass) return listOf(resolved)
     }
 
     if (this is NewExpression) {
-        val resolved = this.classReference?.resolve()
+        val resolved = classReference?.resolve()
         if (resolved is PhpClass) return listOf(resolved)
     }
 
@@ -30,7 +30,7 @@ fun PsiElement.resolvePhpClasses(): List<PhpClass> {
 
     // Resolve via type information
     val typed = this as? PhpTypedElement ?: return emptyList()
-    val project = this.project
+    val project = project
     val index = PhpIndex.getInstance(project)
     val completed = index.completeType(project, typed.type, null)
 

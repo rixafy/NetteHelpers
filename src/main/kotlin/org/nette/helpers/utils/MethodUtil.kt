@@ -4,11 +4,11 @@ import com.jetbrains.php.lang.psi.elements.Method
 import java.util.Locale.getDefault
 
 fun Method.asControlName(): String {
-    if (!this.name.startsWith("createComponent") || this.name == "createComponent") {
+    if (!isControl()) {
         throw IllegalStateException("Method is not a control")
     }
 
-    return this.name.removePrefix("createComponent").replaceFirstChar { it.lowercase(getDefault()) }
+    return name.removePrefix("createComponent").replaceFirstChar { it.lowercase(getDefault()) }
 }
 
 fun Method.isAnyPresenterMethod(): Boolean {
@@ -16,33 +16,33 @@ fun Method.isAnyPresenterMethod(): Boolean {
 }
 
 fun Method.isControl(): Boolean {
-    return this.name.startsWith("createComponent") && this.name != "createComponent"
+    return name.startsWith("createComponent") && name != "createComponent"
 }
 
 fun Method.isAction(): Boolean {
-    return this.name.startsWith("action") && this.name != "action"
+    return name.startsWith("action") && name != "action"
 }
 
 fun Method.isRender(): Boolean {
-    return this.name.startsWith("render") && this.name != "render"
-}
-
-fun Method.isStartup(): Boolean {
-    return this.name == "startup"
-}
-
-fun Method.isBeforeRender(): Boolean {
-    return this.name == "beforeRender"
-}
-
-fun Method.isAfterRender(): Boolean {
-    return this.name == "afterRender"
-}
-
-fun Method.isShutdown(): Boolean {
-    return this.name == "shutdown"
+    return name.startsWith("render") && name != "render"
 }
 
 fun Method.isSignal(): Boolean {
-    return this.name.startsWith("handle") && this.name != "handle"
+    return name.startsWith("handle") && name != "handle"
+}
+
+fun Method.isStartup(): Boolean {
+    return name == "startup"
+}
+
+fun Method.isBeforeRender(): Boolean {
+    return name == "beforeRender"
+}
+
+fun Method.isAfterRender(): Boolean {
+    return name == "afterRender"
+}
+
+fun Method.isShutdown(): Boolean {
+    return name == "shutdown"
 }

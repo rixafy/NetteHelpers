@@ -3,7 +3,7 @@ package org.nette.helpers.utils
 import com.jetbrains.php.lang.psi.elements.*
 
 fun PhpClass.isComponent(): Boolean {
-    return this.isInstanceOf("\\Nette\\Application\\UI\\Component")
+    return isInstanceOf("\\Nette\\Application\\UI\\Component")
 }
 
 fun PhpClass.isInstanceOf(fqn: String): Boolean {
@@ -25,7 +25,5 @@ fun PhpClass.isInstanceOf(fqn: String): Boolean {
 }
 
 fun PhpClass.getControls(): List<Method> {
-    return this.methods.filter {
-        it.name.startsWith("createComponent") && it.name != "createComponent"
-    }
+    return methods.filter { it.isControl() }
 }
