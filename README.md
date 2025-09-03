@@ -24,6 +24,7 @@ Supported Features
 
 * Autocompletion for controls in presenters and components
 * Type-checking of controls in presenters and components
+* Marking presenter methods (actions, signals etc.) as used
 
 Building
 ------------
