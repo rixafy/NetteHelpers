@@ -8,7 +8,7 @@ import com.jetbrains.php.lang.psi.elements.PhpClass
 import org.nette.helpers.utils.isAnyPresenterMethod
 import org.nette.helpers.utils.isComponent
 
-class PresenterImplicitUsageProvider : ImplicitUsageProvider {
+class ComponentImplicitUsageProvider : ImplicitUsageProvider {
     override fun isImplicitUsage(element: PsiElement): Boolean {
         if (DumbService.getInstance(element.project).isDumb) {
             return false
