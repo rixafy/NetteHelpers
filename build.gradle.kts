@@ -1,19 +1,17 @@
-import kotlinx.kover.tasks.KoverXmlTask
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 
-fun properties(key: String) = providers.gradleProperty(key)
-fun environment(key: String) = providers.environmentVariable(key)
+fun cfg(key: String) = providers.gradleProperty(key)
+fun env(key: String) = providers.environmentVariable(key)
 
 plugins {
-    kotlin("jvm") version "2.2.0"
-    id("org.jetbrains.intellij.platform") version "2.7.2"
-    id("org.jetbrains.changelog") version "2.2.0"
-    id("org.jetbrains.kotlinx.kover") version "0.6.1"
+    kotlin("jvm") version "2.2.10"
+    id("org.jetbrains.intellij.platform") version "2.9.0"
+    id("org.jetbrains.changelog") version "2.4.0"
 }
 
-group = properties("pluginGroup").get()
-version = properties("pluginVersion").get()
+group = cfg("pluginGroup").get()
+version = cfg("pluginVersion").get()
 
 repositories {
     mavenCentral()
@@ -29,26 +27,17 @@ kotlin {
 
 dependencies {
     intellijPlatform {
-        val type = providers.gradleProperty("platformType")
-        val version = providers.gradleProperty("platformVersion")
-
-        create(type, version)
-
-        val platformPlugins = properties("platformPlugins").map { it.split(',').map(String::trim).filter(String::isNotEmpty) }
-        plugins(platformPlugins)
+        create(providers.gradleProperty("platformType"), providers.gradleProperty("platformVersion"))
+        plugins(providers.gradleProperty("platformPlugins").map { it.split(',') })
     }
 }
 
-// https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-extension.html#intellijPlatform
 intellijPlatform {
     pluginConfiguration {
-        name.set(properties("pluginName"))
-        version.set(properties("pluginVersion"))
-        ideaVersion {
-            sinceBuild.set(properties("pluginSinceBuild"))
-        }
-        // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-        description.set(providers.fileContents(layout.projectDirectory.file("README.md")).asText.map {
+        name = cfg("pluginName")
+        version = cfg("pluginVersion")
+
+        description = providers.fileContents(layout.projectDirectory.file("README.md")).asText.map {
             val start = "<!-- Plugin description -->"
             val end = "<!-- Plugin description end -->"
 
@@ -58,45 +47,32 @@ intellijPlatform {
                 }
                 subList(indexOf(start) + 1, indexOf(end)).joinToString("\n").let(::markdownToHTML)
             }
-        })
-        changeNotes.set(provider {
+        }
+
+        changeNotes = provider {
             changelog.getAll().values.joinToString("\n") { changelog.renderItem(it, Changelog.OutputType.HTML) }
-        })
+        }
+
+        ideaVersion {
+            sinceBuild = cfg("pluginSinceBuild")
+        }
     }
 
     autoReload = true
 }
 
-// https://github.com/Kotlin/kotlinx-kover#configuration
-kover.xmlReport {
-    onCheck.set(true)
-}
-
 changelog {
-    version.set(properties("pluginVersion"))
-    repositoryUrl = properties("pluginRepositoryUrl")
-    path.set(file("CHANGELOG.md").canonicalPath)
+    version = cfg("pluginVersion")
+    repositoryUrl = cfg("pluginRepositoryUrl")
+    path = file("CHANGELOG.md").canonicalPath
 }
 
 tasks {
-    // Set the JVM compatibility versions
-    properties("javaVersion").get().let {
-        withType<JavaCompile> {
-            sourceCompatibility = it
-            targetCompatibility = it
-        }
-    }
-
-    withType<KoverXmlTask> {
-        dependsOn("compileJava")
-    }
-
     wrapper {
-        gradleVersion = properties("gradleVersion").get()
+        gradleVersion = cfg("gradleVersion").get()
     }
-
 
     publishPlugin {
-        token.set(environment("PLUGIN_PUBLISH_TOKEN"))
+        token = env("PLUGIN_PUBLISH_TOKEN")
     }
 }
