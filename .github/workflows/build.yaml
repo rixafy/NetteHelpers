@@ -35,6 +35,7 @@ jobs:
           ide-versions: |
             phpstorm:2023.2
             phpstorm:2024.1
+            phpstorm:2025.1
             phpstorm:LATEST-EAP-SNAPSHOT
       - name: Upload release assets
         uses: softprops/action-gh-release@v2
