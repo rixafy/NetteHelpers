@@ -30,7 +30,7 @@ Building
 ------------
 
 ```$xslt
-$ ./gradlew build
+$ ./gradlew buildPlugin
 ```
 
 Testing in dummy IDE
