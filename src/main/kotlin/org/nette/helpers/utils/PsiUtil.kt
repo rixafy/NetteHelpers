@@ -9,7 +9,7 @@ import com.jetbrains.php.lang.psi.elements.PhpClass
 import com.jetbrains.php.lang.psi.elements.PhpTypedElement
 import com.jetbrains.php.lang.psi.elements.Variable
 
-fun PsiElement.resolvePhpClasses(): List<PhpClass> {
+fun PsiElement.resolvePhpClasses(useIndex: Boolean = false): List<PhpClass> {
     // $this -> containing class
     if (this is Variable && name == "this") {
         PsiTreeUtil.getParentOfType(this, PhpClass::class.java)?.let { return listOf(it) }
@@ -26,19 +26,20 @@ fun PsiElement.resolvePhpClasses(): List<PhpClass> {
         if (resolved is PhpClass) return listOf(resolved)
     }
 
-    if (this is PhpClass) return listOf(this)
+    if (this is PhpClass) {
+        return listOf(this)
+    }
 
-    // Resolve via type information
+    if (!useIndex) {
+        return emptyList()
+    }
+
+    // Find out the type of variable
     val typed = this as? PhpTypedElement ?: return emptyList()
-    val project = project
     val index = PhpIndex.getInstance(project)
-    val completed = index.completeType(project, typed.type, null)
-
     val result = LinkedHashSet<PhpClass>()
-    for (candidate in completed.types) {
-        if (!candidate.startsWith("\\")) continue
-        val classes = index.getClassesByFQN(candidate)
-        result.addAll(classes)
+    for (type in typed.type.types.filter { it.startsWith("\\") }) {
+        result.addAll(index.getClassesByFQN(type))
     }
 
     return result.toList()

@@ -43,7 +43,7 @@ class ControlCompletionContributor : CompletionContributor() {
                 }
             }
 
-            val classes = target?.resolvePhpClasses()?.filter { it.isComponent() } ?: return
+            val classes = target?.resolvePhpClasses(true)?.filter { it.isComponent() } ?: return
             if (classes.isEmpty()) return
 
             val prefix = result.prefixMatcher.prefix.let { prefix ->
