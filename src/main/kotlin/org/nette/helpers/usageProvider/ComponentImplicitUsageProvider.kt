@@ -5,8 +5,8 @@ import com.intellij.openapi.project.DumbService
 import com.intellij.psi.PsiElement
 import com.jetbrains.php.lang.psi.elements.Method
 import com.jetbrains.php.lang.psi.elements.PhpClass
-import org.nette.helpers.utils.isAnyPresenterMethod
-import org.nette.helpers.utils.isComponent
+import org.nette.helpers.ext.isAnyPresenterMethod
+import org.nette.helpers.ext.isComponent
 
 class ComponentImplicitUsageProvider : ImplicitUsageProvider {
     override fun isImplicitUsage(element: PsiElement): Boolean {

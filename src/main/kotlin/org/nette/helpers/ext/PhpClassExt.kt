@@ -1,4 +1,4 @@
-package org.nette.helpers.utils
+package org.nette.helpers.ext
 
 import com.jetbrains.php.lang.psi.elements.*
 

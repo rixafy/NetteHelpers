@@ -8,7 +8,7 @@ import com.intellij.util.ProcessingContext
 import com.jetbrains.php.lang.psi.elements.ArrayAccessExpression
 import com.jetbrains.php.lang.psi.elements.MethodReference
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
-import org.nette.helpers.utils.*
+import org.nette.helpers.ext.*
 
 class ControlCompletionContributor : CompletionContributor() {
     init {

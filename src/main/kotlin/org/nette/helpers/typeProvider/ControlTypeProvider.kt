@@ -7,7 +7,7 @@ import com.jetbrains.php.PhpIndex
 import com.jetbrains.php.lang.psi.elements.*
 import com.jetbrains.php.lang.psi.resolve.types.PhpType
 import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider4
-import org.nette.helpers.utils.*
+import org.nette.helpers.ext.*
 
 class ControlTypeProvider : PhpTypeProvider4 {
     private val separator = '\u001f'
